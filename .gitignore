@@ -2,3 +2,5 @@ pad.py
 *.pt
 dist
 **/__pycache__/
+.env
+deploy.sh

@@ -3,6 +3,9 @@
 ## usage
 
 ```python
+import PIL
+from clipscope import ConfiguredViT, TopKSAE
+
 device='cpu'
 filename_in_hf_repo = "725159424.pt"
 sae = TopKSAE.from_pretrained(repo_id="lewington/CLIP-ViT-L-scope", filename=filename_in_hf_repo, device=device)
