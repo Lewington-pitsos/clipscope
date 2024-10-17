@@ -1,0 +1,16 @@
+[tool.poetry]
+name = "clipscope"
+version = "0.1.0"
+description = ""
+authors = ["Louka Ewington-Pitsos <lewingtonpitsos@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+torch = "^2.5.0"
+transformers = "^4.45.2"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

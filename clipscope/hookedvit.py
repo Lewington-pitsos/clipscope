@@ -1,12 +1,12 @@
 import torch
 from transformers import CLIPProcessor, CLIPModel
-from typing import Callable
 from contextlib import contextmanager
-from typing import List, Tuple
 from functools import partial
 
+# a lot of this code is copy-pasted from https://github.com/HugoFry/mats_sae_training_for_ViTs
+
 class Hook():
-    def __init__(self, block_layer: int, module_name: str, hook_fn: Callable, return_module_output = True):
+    def __init__(self, block_layer: int, module_name: str, hook_fn, return_module_output = True):
         self.path_dict = {
             'resid': '',
         }
@@ -15,7 +15,7 @@ class Hook():
         self.function = self.get_full_hook_fn(hook_fn)
         self.attr_path = self.get_attr_path(block_layer, module_name)
 
-    def get_full_hook_fn(self, hook_fn: Callable):
+    def get_full_hook_fn(self, hook_fn):
 
         def full_hook_fn(module, module_input, module_output):
             hook_fn_output = hook_fn(module_output[0])
@@ -61,13 +61,13 @@ class HookedViT():
         processor = CLIPProcessor.from_pretrained(model_name)
         return model, processor
 
-    def run_with_cache(self, list_of_hook_locations: List[Tuple[int,str]], *args, **kwargs):
+    def run_with_cache(self, list_of_hook_locations, *args, **kwargs):
         cache_dict, list_of_hooks = self.get_caching_hooks(list_of_hook_locations)
         with self.hooks(list_of_hooks) as hooked_model:
             with torch.no_grad():
                 return hooked_model(*args, **kwargs)
                 
-    def get_caching_hooks(self, list_of_hook_locations: List[Tuple[int,str]]):
+    def get_caching_hooks(self, list_of_hook_locations):
         """
         Note that the cache dictionary is index by the tuple (block_layer, module_name).
         """
@@ -82,13 +82,13 @@ class HookedViT():
         return cache_dict, list_of_hooks
 
     @torch.no_grad
-    def run_with_hooks(self, list_of_hooks: List[Hook], *args, **kwargs):
+    def run_with_hooks(self, list_of_hooks, *args, **kwargs):
         with self.hooks(list_of_hooks) as hooked_model:
             with torch.no_grad():
                 return hooked_model(*args, **kwargs)
     
     @contextmanager
-    def hooks(self, hooks: List[Hook]):
+    def hooks(self, hooks):
         """
 
         This is a context manager for running a model with hooks. The funciton adds 
