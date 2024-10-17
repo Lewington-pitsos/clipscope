@@ -129,7 +129,7 @@ class HookedViT():
     def train(self):
         self.model.train()
 
-class HookedViTPipeline(HookedViT):
+class ConfiguredViT(HookedViT):
     def __init__(self, hook_locations, *args, **kwargs):
         super().__init__(*args, **kwargs)
         

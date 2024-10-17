@@ -1,2 +1,2 @@
-from hookedvit import HookedViT, HookedViTPipeline
-from sae import SAE, TopKSAE, SwitchSAE, TopKSwitchSAE
+from clipscope.hookedvit import HookedViT, ConfiguredViT
+from clipscope.sae import SAE, TopKSAE
