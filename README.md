@@ -15,21 +15,17 @@ locations = [(22, 'resid')]
 transformer = ConfiguredViT(locations, transformer_name, device=device)
 
 input = PIL.Image.new("RGB", (224, 224), (0, 0, 0)) # black image for testing
-# alternatively load an image
-# input = PIL.Image.open("test.jpg")
-# input = input.resize((224, 224)).convert("RGB")
 
 activations = transformer.all_activations(input)[locations[0]] # (1, 257, 1024)
 assert activations.shape == (1, 257, 1024)
 
-activations = activations[:, 0, :] # just the cls token
+activations = activations[:, 0] # just the cls token
 # alternatively flatten the activations
 # activations = activations.flatten(1)
 
-activations = transformer.all_activations(input) # (1, 257, 1024)
 print('activations shape', activations.shape)
 
-output = sae(activations)
+output = sae.forward_verbose(activations)
 
 print('output keys', output.keys())
 

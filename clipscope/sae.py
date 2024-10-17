@@ -5,7 +5,7 @@ class SAE(torch.nn.Module):
     @classmethod
     def _download(cls, repo_id, filename, device):
         local_file = hf_hub_download(repo_id=repo_id, filename=filename, repo_type="model")
-        checkpoint = torch.load(local_file, map_location=device)
+        checkpoint = torch.load(local_file, map_location=device, weights_only=True)
         return checkpoint
 
     @classmethod
@@ -32,7 +32,7 @@ class SAE(torch.nn.Module):
     def _decode(self, latent, dec):
         return latent, latent @ dec
 
-    def forward_descriptive(self, x):
+    def forward_verbose(self, x):
         encoded = self._encode(((x - self.pre_b) @ self.enc)) # (n_to_expert, expert_dim)
         latent, reconstruction = self._decode(encoded, self.dec)
         
@@ -49,7 +49,7 @@ class SAE(torch.nn.Module):
         }
 
     def forward(self, x):
-        recon = self.forward_descriptive(x)
+        recon = self.forward_verbose(x)
         return recon
 
 def encode_topk(pre_activation, k):

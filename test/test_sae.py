@@ -19,7 +19,7 @@ def test_sae():
 
     activations = activations[:, 0, :] # just the cls token
 
-    output = sae.forward_descriptive(activations)
+    output = sae.forward_verbose(activations)
 
     print('output keys', output.keys())
     assert 'latent' in output
