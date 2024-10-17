@@ -12,7 +12,7 @@ class SAE(torch.nn.Module):
     def from_pretrained(cls, repo_id, filename, n_features=65536, d_in=1024, device='cuda'):
         checkpoint = cls._download(repo_id, filename, device)
 
-        sae = cls(n_features, d_in, device=device)
+        sae = cls(n_features=n_features, d_in=d_in, device=device)
         sae.load_state_dict(checkpoint['model_state_dict'])
                                          
         return sae
@@ -52,7 +52,6 @@ class SAE(torch.nn.Module):
         recon = self.forward_descriptive(x)
         return recon
 
-
 def encode_topk(pre_activation, k):
     return torch.topk(pre_activation, k=k, dim=-1) # (batch_size, k)
 
@@ -67,7 +66,7 @@ class TopKSAE(SAE):
     def from_pretrained(cls, repo_id, filename, k=32, n_features=65536, d_in=1024, device='cuda'):
         checkpoint = cls._download(repo_id, filename, device)
 
-        sae = cls(k, n_features, d_in, device=device)
+        sae = cls(k=k, n_features=n_features, d_in=d_in, device=device)
         sae.load_state_dict(checkpoint['model_state_dict'])
                                          
         return sae
@@ -75,7 +74,7 @@ class TopKSAE(SAE):
     def __init__(self, k, *args, **kwargs):
         super(TopKSAE, self).__init__(*args, **kwargs)
         self.k = k
-        self.activation = None
+        self.activation_fn = None
 
     def _encode(self, x):
         return encode_topk(x, self.k)

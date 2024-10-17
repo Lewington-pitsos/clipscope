@@ -65,8 +65,9 @@ class HookedViT():
         cache_dict, list_of_hooks = self.get_caching_hooks(list_of_hook_locations)
         with self.hooks(list_of_hooks) as hooked_model:
             with torch.no_grad():
-                return hooked_model(*args, **kwargs)
-                
+                output = hooked_model(*args, **kwargs)
+        return output, cache_dict
+
     def get_caching_hooks(self, list_of_hook_locations):
         """
         Note that the cache dictionary is index by the tuple (block_layer, module_name).
