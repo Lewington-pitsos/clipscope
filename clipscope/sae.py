@@ -1,18 +1,20 @@
 import torch
 from huggingface_hub import hf_hub_download
 
+REPO_ID = "lewington/CLIP-ViT-L-scope"
+
 class SAE(torch.nn.Module):
     @classmethod
-    def _download(cls, repo_id, filename, device):
-        local_file = hf_hub_download(repo_id=repo_id, filename=filename, repo_type="model")
+    def _download(cls, checkpoint, device, repo_id=REPO_ID):
+        local_file = hf_hub_download(repo_id=repo_id, filename=checkpoint, repo_type="model")
         checkpoint = torch.load(local_file, map_location=device, weights_only=True)
         return checkpoint
 
     @classmethod
-    def from_pretrained(cls, repo_id, filename, n_features=65536, d_in=1024, device='cuda'):
-        checkpoint = cls._download(repo_id, filename, device)
+    def from_pretrained(cls, checkpoint, repo_id=REPO_ID, device='cuda'):
+        checkpoint = cls._download(checkpoint=checkpoint, repo_id=repo_id, device=device)
 
-        sae = cls(n_features=n_features, d_in=d_in, device=device)
+        sae = cls(n_features=checkpoint['n_features'], d_in=checkpoint['d_in'], device=device)
         sae.load_state_dict(checkpoint['model_state_dict'])
                                          
         return sae
@@ -63,10 +65,10 @@ def eagre_decode(topk, dec):
     
 class TopKSAE(SAE):
     @classmethod
-    def from_pretrained(cls, repo_id, filename, k=32, n_features=65536, d_in=1024, device='cuda'):
-        checkpoint = cls._download(repo_id, filename, device)
+    def from_pretrained(cls, checkpoint, repo_id=REPO_ID, device='cuda'):
+        checkpoint = cls._download(checkpoint=checkpoint, repo_id=repo_id, device=device)
 
-        sae = cls(k=k, n_features=n_features, d_in=d_in, device=device)
+        sae = cls(k=checkpoint['k'], n_features=checkpoint['n_features'], d_in=checkpoint['d_in'], device=device)
         sae.load_state_dict(checkpoint['model_state_dict'])
                                          
         return sae

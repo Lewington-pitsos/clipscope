@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "clipscope"
-version = "0.1.5"
+version = "0.1.6"
 description = ""
 authors = ["Louka Ewington-Pitsos <lewingtonpitsos@gmail.com>"]
 readme = "README.md"
@@ -11,6 +11,10 @@ torch = "^2.5.0"
 transformers = "^4.45.2"
 huggingface-hub = "^0.25.2"
 
+
+[tool.poetry.group.dev.dependencies]
+pillow = "^11.0.0"
+pytest = "^8.3.3"
 
 [build-system]
 requires = ["poetry-core"]

@@ -5,6 +5,8 @@ from functools import partial
 
 # a lot of this code is copy-pasted from https://github.com/HugoFry/mats_sae_training_for_ViTs
 
+TRANSFORMER_NAME = 'laion/CLIP-ViT-L-14-laion2B-s32B-b82K'
+
 class Hook():
     def __init__(self, block_layer: int, module_name: str, hook_fn, return_module_output = True):
         self.path_dict = {
@@ -51,7 +53,7 @@ class Hook():
 
 
 class HookedViT():
-    def __init__(self, model_name: str, device = 'cuda'):
+    def __init__(self, model_name: str = TRANSFORMER_NAME, device = 'cuda'):
         model, processor = self.get_ViT(model_name)
         self.model = model.to(device)
         self.processor = processor
