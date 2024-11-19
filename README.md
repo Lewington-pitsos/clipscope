@@ -1,5 +1,7 @@
 # clipscope
 
+[Github Repo](https://pypi.org/manage/project/clipscope)
+
 ## usage
 
 ```python
