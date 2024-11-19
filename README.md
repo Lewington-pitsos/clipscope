@@ -1,6 +1,6 @@
 # clipscope
 
-[Github Repo](https://pypi.org/manage/project/clipscope)
+[Github Repo](https://github.com/Lewington-pitsos/clipscope)
 
 ## usage
 
